@@ -12,6 +12,10 @@ namespace HotelBookingAPI.Data
         //RoomTypeAPI
         public DbSet<RoomType> RoomTypes { get; set; }
 
+        //RoomTypeAPI
+        public DbSet<Room> Rooms { get; set; }
+
+        //AuthAPI
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelbuilder)

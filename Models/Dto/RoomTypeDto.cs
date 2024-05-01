@@ -1,4 +1,6 @@
-﻿namespace HotelBookingAPI.Models.Dto
+﻿
+
+namespace HotelBookingAPI.Models.Dto
 {
     public class RoomTypeDto
     {
@@ -6,7 +8,7 @@
         public string Name { get; set; }
         /*[NotMapped]*/
         public IFormFile? File { get; set; }
-        public string? Photo { get; set; }
+        public string? Image { get; set; } = String.Empty;
         public string Discription { get; set; }
         public string Services { get; set; }
         public decimal Size { get; set; }
