@@ -13,5 +13,6 @@ namespace HotelBookingAPI.Models.Dto
         public string Services { get; set; }
         public decimal Size { get; set; }
         public int Capacity { get; set; }
+        public decimal PricePerNight { get; set; }
     }
 }

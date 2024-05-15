@@ -12,6 +12,10 @@ namespace HotelBookingAPI
             {
                 config.CreateMap<RoomTypeDto, RoomType>().ReverseMap();
                 config.CreateMap<RoomDto, Room>().ReverseMap();
+                config.CreateMap<CheckAvailabilityDto, CheckAvailability>().ReverseMap();
+                config.CreateMap<BookingRoomDto, BookingRoom>().ReverseMap();
+                config.CreateMap<CheckAvailabilityDto, CheckAvailability>().ReverseMap();
+               
             });
             return mappingConfig;
         }

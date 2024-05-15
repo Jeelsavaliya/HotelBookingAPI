@@ -29,5 +29,7 @@ namespace HotelBookingAPI.Models
 
         [Column("Capacity", TypeName = "int")]
         public int Capacity { get; set; }
+        [Column("PricePerNight", TypeName = "decimal(10,2)")]
+        public decimal PricePerNight { get; set; }
     }
 }

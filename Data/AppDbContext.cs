@@ -15,6 +15,12 @@ namespace HotelBookingAPI.Data
         //RoomTypeAPI
         public DbSet<Room> Rooms { get; set; }
 
+        //BookingRoomAPI
+        public DbSet<BookingRoom> BookingRooms { get; set; }
+
+        //CheckAvailabilityAPI
+        public DbSet<CheckAvailability> CheckAvailabilitys { get; set; }
+
         //AuthAPI
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 

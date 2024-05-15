@@ -26,7 +26,7 @@ namespace HotelBookingAPI.Controllers
 
         #region Get All Rooms
         [HttpGet]
-        [Authorize(Roles = "ADMIN")]
+        
         public ResponseDto Get()
         {
             try
@@ -116,7 +116,7 @@ namespace HotelBookingAPI.Controllers
 
         #region Update Room
         [HttpPut]
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "ADMIN,CUSTOMER")]
         public ResponseDto Put([FromForm] RoomDto roomDto)
         {
             try

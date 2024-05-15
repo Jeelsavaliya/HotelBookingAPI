@@ -13,6 +13,7 @@ namespace HotelBookingAPI.Models.Dto
         public string Discription { get; set; }
         public int Capacity { get; set; }
         public int RoomNumber { get; set; }
+       /* public decimal PricePerNight { get; set; }*/
         [NotMapped]
         public RoomTypeDto? RoomType { get; set; }
     }

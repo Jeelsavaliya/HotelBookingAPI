@@ -4,6 +4,7 @@ using HotelBookingAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelBookingAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240501084059_AddCheckAvailavilityTable")]
+    partial class AddCheckAvailavilityTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -91,57 +94,6 @@ namespace HotelBookingAPI.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("HotelBookingAPI.Models.BookingRoom", b =>
-                {
-                    b.Property<int>("BookingRoomID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookingRoomID"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("Address");
-
-                    b.Property<DateTime>("CheckInDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("CheckOutDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("Email");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("FirstName");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("PhoneNumber");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("RoomID")
-                        .HasColumnType("int");
-
-                    b.HasKey("BookingRoomID");
-
-                    b.HasIndex("RoomID");
-
-                    b.ToTable("BookingRooms", (string)null);
-                });
-
             modelBuilder.Entity("HotelBookingAPI.Models.CheckAvailability", b =>
                 {
                     b.Property<int>("CheckAvailabilityID")
@@ -163,7 +115,7 @@ namespace HotelBookingAPI.Migrations
 
                     b.HasIndex("RoomID");
 
-                    b.ToTable("CheckAvailabilitys", (string)null);
+                    b.ToTable("CheckAvailabilitys");
                 });
 
             modelBuilder.Entity("HotelBookingAPI.Models.Room", b =>
@@ -203,7 +155,7 @@ namespace HotelBookingAPI.Migrations
 
                     b.HasIndex("RoomTypeID");
 
-                    b.ToTable("Rooms", (string)null);
+                    b.ToTable("Rooms");
                 });
 
             modelBuilder.Entity("HotelBookingAPI.Models.RoomType", b =>
@@ -247,7 +199,7 @@ namespace HotelBookingAPI.Migrations
 
                     b.HasKey("RoomTypeID");
 
-                    b.ToTable("RoomTypes", (string)null);
+                    b.ToTable("RoomTypes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -381,17 +333,6 @@ namespace HotelBookingAPI.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("HotelBookingAPI.Models.BookingRoom", b =>
-                {
-                    b.HasOne("HotelBookingAPI.Models.Room", "Room")
-                        .WithMany()
-                        .HasForeignKey("RoomID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("HotelBookingAPI.Models.CheckAvailability", b =>
