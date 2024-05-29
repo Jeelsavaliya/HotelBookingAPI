@@ -5,6 +5,7 @@ using HotelBookingAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using HotelBookingAPI.Service.IService;
 
 namespace HotelBookingAPI.Controllers
 {
@@ -52,6 +53,28 @@ namespace HotelBookingAPI.Controllers
             {
                 BookingRoom obj = _db.BookingRooms.First(u => u.BookingRoomID == id);
                 _response.Result = _mapper.Map<BookingRoomDto>(obj);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+        #endregion
+
+        #region Get BookingRoom By User
+        [HttpGet]
+        [Route("{userid}")]
+        public ResponseDto GetByUser(string userid)
+        {
+            try
+            {
+                /*BookingRoom obj = _db.BookingRooms.(u => u.UserId == userid).;
+                _response.Result = _mapper.Map<BookingRoomDto>(obj);*/
+
+                IEnumerable<BookingRoom> objList = _db.BookingRooms.Where(u => u.UserId == userid);
+                _response.Result = _mapper.Map<IEnumerable<BookingRoomDto>>(objList);
             }
             catch (Exception ex)
             {

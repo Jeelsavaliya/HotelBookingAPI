@@ -6,8 +6,10 @@ namespace HotelBookingAPI.Models.Dto
     {
         public int BookingRoomID { get; set; }
         public int RoomID { get; set; }
-        public string? Id {  get; set; }
-       /* public Room Image {  get; set; }*/
+
+        public string? UserId { get; set; }
+
+        /* public Room Image {  get; set; }*/
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
@@ -15,8 +17,9 @@ namespace HotelBookingAPI.Models.Dto
         public string Address { get; set; }
         public DateTime CheckInDate { get; set; }
         public DateTime CheckOutDate { get; set; }
-        public decimal Price { get; set; }
-        /*[NotMapped]
-        public RoomDto? Room { get; set; }*/
+        public decimal? TotalPrice { get; set; }
+        public string? CheckIn { get; set; }
+        public string? CheckOut { get; set; }
     }
+
 }

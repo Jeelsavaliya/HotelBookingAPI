@@ -17,22 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Title = "Example API",
-                    Version = "v1",
-                    Description = "An example of an ASP.NET Core Web API",
-                    Contact = new OpenApiContact
-                    {
-                        Name = "Example Contact",
-                        Email = "example@example.com",
-                        Url = new Uri("https://example.com/contact"),
-                    },
-                });
-
-            });
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("myConnectionStrings")));
 
@@ -45,7 +30,6 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
 
-builder.Services.AddTransient<IMailService, MailService>();
 
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -85,7 +69,6 @@ builder.AddAppAuthetication();
 
 /*builder.Services.AddAuthorization();*/
 
-builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 
 var app = builder.Build();
 
@@ -93,10 +76,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(option =>
-    {
-        option.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-    });
+    app.UseSwaggerUI();
 }
 
 app.UseStaticFiles();

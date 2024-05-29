@@ -24,7 +24,8 @@ namespace HotelBookingAPI.Models
         [Column("RoomNumber", TypeName = "int")]
         public int RoomNumber { get; set; }
 
-        /*public decimal PricePerNight { get; set; }*/
+        [Column("PricePerNight", TypeName = "decimal(10,2)")]
+        public decimal PricePerNight { get; set; }
 
         //For ForeignKey
         [ForeignKey("RoomTypeID")]

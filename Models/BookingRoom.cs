@@ -9,7 +9,9 @@ namespace HotelBookingAPI.Models
         [Key] 
         public int BookingRoomID { get; set; }
         public int RoomID { get; set; }
-        public string? Id { get; set; }
+
+        public string? UserId { get; set; }
+
         /*public Room Image { get; set; }*/
         [Column("FirstName", TypeName = "nvarchar(50)")]
         [Required]
@@ -24,17 +26,16 @@ namespace HotelBookingAPI.Models
         [Column("Address", TypeName = "nvarchar(255)")]
         [Required]
         public string Address { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime? CheckInDate { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime? CheckOutDate { get; set;}
 
-        public DateTime CheckInDate { get; set; }
-        public DateTime CheckOutDate { get; set;}
-        public decimal? Price { get; set; }
-        
+        public decimal? TotalPrice { get; set; }
+        public string? CheckIn { get; set; }
+        public string? CheckOut { get; set; }
 
         [ForeignKey("RoomID")]
         public Room Room { get; set; }
-
-        /*[ForeignKey("Id")]
-        public virtual ApplicationUser ApplicationUser { get; set; }*/
-
     }
 }
