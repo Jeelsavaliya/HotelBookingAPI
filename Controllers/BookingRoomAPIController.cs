@@ -106,7 +106,7 @@ namespace HotelBookingAPI.Controllers
 
         #region Update BookingRoom
         [HttpPut]
-        [Authorize(Roles = "ADMIN")]
+        /*[Authorize(Roles = "ADMIN")]*/
         public ResponseDto Put([FromBody] BookingRoomDto bookingRoomDto)
         {
             try
