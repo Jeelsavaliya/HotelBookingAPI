@@ -17,13 +17,15 @@ namespace HotelBookingAPI.Controllers
         private readonly AppDbContext _db;
         private ResponseDto _response;
         private IMapper _mapper;
+        private readonly IConfiguration _configuration;
 
 
-        public RoomTypeAPIController(AppDbContext db, IMapper mapper)
+        public RoomTypeAPIController(AppDbContext db, IMapper mapper, IConfiguration configuration)
         {
             _db = db;
             _mapper = mapper;
             _response = new ResponseDto();
+            _configuration = configuration;
         }
 
         #region Get All RoomType 
@@ -33,7 +35,8 @@ namespace HotelBookingAPI.Controllers
             try
             {
                 IEnumerable<RoomType> objList = _db.RoomTypes.ToList();
-                _response.Result = _mapper.Map<IEnumerable<RoomTypeDto>>(objList);
+
+                _response.Result = objList;
             }
             catch (Exception ex)
             {
@@ -44,9 +47,9 @@ namespace HotelBookingAPI.Controllers
         }
         #endregion
 
-        #region Get Roomtypw
+        #region Get Roomtype
         [HttpGet("{id}")]
-        public ResponseDto Get([FromRoute]int id)
+        public ResponseDto Get([FromRoute] int id)
         {
             try
             {
@@ -61,7 +64,7 @@ namespace HotelBookingAPI.Controllers
             return _response;
         }
         #endregion
-            
+
         #region Create RoomType
         [HttpPost]
         [Authorize(Roles = "ADMIN")]
@@ -70,8 +73,6 @@ namespace HotelBookingAPI.Controllers
             try
             {
                 RoomType roomType = _mapper.Map<RoomType>(roomTypeDto);
-                _db.RoomTypes.Add(roomType);
-                _db.SaveChanges();
 
                 if (roomTypeDto.File != null)
                 {
@@ -85,22 +86,41 @@ namespace HotelBookingAPI.Controllers
                         }
                     }
 
-                    string fileName = roomType.RoomTypeID + Path.GetExtension(roomTypeDto.File.FileName);
-                    string filePath = @"wwwroot\RoomTypeImages\" + fileName;
+                    /*string fileName = roomType.RoomTypeID + Path.GetExtension(roomTypeDto.File.FileName);
+                    //string filePath = @"wwwroot\RoomTypeImages\" + fileName;
+                    string filePath = @"/OnlineHotelRoomBooking/Photos/" + fileName;
                     var filePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
                     using (var fileStream = new FileStream(filePathDirectory, FileMode.Create))
                     {
                         roomTypeDto.File.CopyTo(fileStream);
                     }
                     var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
-                    roomType.Image = "/RoomTypeImages/" + fileName;
-                   /* roomType.Image = filePath;*/
+                    //roomType.Image = "/RoomTypeImages/" + fileName;
+                    roomType.Image = fileName;*/
+
+
+                    var baseFolder = _configuration.GetSection("BaseUrl:baseFolder").Value;
+                    var imagesFolder = _configuration.GetSection("BaseUrl:imagesFolder").Value;
+
+                    baseFolder = baseFolder + imagesFolder;
+
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), baseFolder);
+                    if (!Directory.Exists(filePath)) {
+                        Directory.CreateDirectory(filePath);
+                    }
+                    string fileName = DateTime.UtcNow.ToString("ddMMyyyyhhmmss") + "_" + roomType.File.FileName;
+
+                    using (var fileStream = new FileStream(filePath + fileName, FileMode.Create))
+                    {
+                        roomTypeDto.File.CopyTo(fileStream);
+                    }
+                    roomType.Image = imagesFolder + fileName;
                 }
                 else
                 {
-                    roomType.Image = "https://placehold.co/600x400";
+                    roomType.Image = "http://placehold.co/600x400";
                 }
-                _db.RoomTypes.Update(roomType);
+                _db.RoomTypes.Add(roomType);
                 _db.SaveChanges();
                 _response.Result = _mapper.Map<RoomTypeDto>(roomType);
 
@@ -116,41 +136,41 @@ namespace HotelBookingAPI.Controllers
 
         #region Update RoomType
         [HttpPut]
+        [Route("{roomtypeId}")]
         [Authorize(Roles = "ADMIN")]
-        public ResponseDto Put([FromForm] RoomTypeDto roomTypeDto)
+        public ResponseDto Put([FromRoute]int roomtypeId, [FromForm] RoomTypeDto roomTypeDto)
         {
             try
             {
                 RoomType roomType = _mapper.Map<RoomType>(roomTypeDto);
 
+                roomType.RoomTypeID = roomtypeId;
+                
                 if (roomTypeDto.File != null)
-                {
-                    if (!string.IsNullOrEmpty(roomType.Image))
-                    {
-                        var oldFilePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), roomType.Image);
-                        FileInfo file = new FileInfo(oldFilePathDirectory);
-                        if (file.Exists)
-                        {
-                            file.Delete();
-                        }
-                    }
+                {                        
+                    var baseFolder = _configuration.GetSection("BaseUrl:baseFolder").Value;
+                    var imagesFolder = _configuration.GetSection("BaseUrl:imagesFolder").Value;
 
-                    string fileName = roomType.RoomTypeID + Path.GetExtension(roomTypeDto.File.FileName);
-                    string filePath = @"wwwroot/RoomTypeImages/" + fileName;
-                    var filePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
-                    using (var fileStream = new FileStream(filePathDirectory, FileMode.Create))
+                    baseFolder = baseFolder + imagesFolder;
+
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), baseFolder);
+                    if (!Directory.Exists(filePath))
+                    {
+                        Directory.CreateDirectory(filePath);
+                    }
+                    string fileName = DateTime.UtcNow.ToString("ddMMyyyyhhmmss") + "_" + roomType.File.FileName;
+
+                    using (var fileStream = new FileStream(filePath + fileName, FileMode.Create))
                     {
                         roomTypeDto.File.CopyTo(fileStream);
                     }
-                    var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
-                    roomType.Image = "/RoomTypeImages/" + fileName;
-                    /*roomType.Image = filePath;*/
+                    roomType.Image = imagesFolder + fileName;
+
                 }
+
 
                 _db.RoomTypes.Update(roomType);
                 _db.SaveChanges();
-
-                _response.Result = _mapper.Map<RoomTypeDto>(roomType);
             }
 
             catch (Exception ex)

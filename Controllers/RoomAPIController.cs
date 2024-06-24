@@ -15,13 +15,15 @@ namespace HotelBookingAPI.Controllers
         private readonly AppDbContext _db;
         private ResponseDto _response;
         private IMapper _mapper;
+        private readonly IConfiguration _configuration;
 
-
-        public RoomAPIController(AppDbContext db, IMapper mapper)
+        public RoomAPIController(AppDbContext db, IMapper mapper, IConfiguration configuration)
         {
             _db = db;
             _mapper = mapper;
             _response = new ResponseDto();
+            _configuration = configuration;
+            //_baseUrl = baseUrl;
         }
 
         #region Get All Rooms
@@ -85,20 +87,51 @@ namespace HotelBookingAPI.Controllers
                         }
                     }
 
-                    string fileName = room.RoomID + Path.GetExtension(roomDto.File.FileName);
-                    string filePath = @"wwwroot\RoomImages\" + fileName;
+                    /*string fileName = room.RoomID + Path.GetExtension(roomDto.File.FileName);
+                    //string filePath = @"wwwroot\RoomImages\" + fileName;
+                    string filePath = @"\OnlineHotelRoomBooking\Photos\" + fileName;
                     var filePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
                     using (var fileStream = new FileStream(filePathDirectory, FileMode.Create))
                     {
                         roomDto.File.CopyTo(fileStream);
                     }
                     var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
-                    room.Image = "/RoomImages/" + fileName;
+                    //room.Image = "/RoomImages/" + fileName;
+                    room.Image = "/"+ fileName;*/
+
+                    /*string fileName = room.RoomID + Path.GetExtension(roomDto.File.FileName);
+                    string filePath = *//*_baseUrl.WebUrl + _baseUrl.ImageUrl +*//* fileName;
+                    var filePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+                    using (var fileStream = new FileStream(filePathDirectory, FileMode.Create))
+                    {
+                        roomDto.File.CopyTo(fileStream);
+                    }
+                    var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
+                
+                    room.Image = fileName;*/
+
+                    var baseFolder = _configuration.GetSection("BaseUrl:baseFolder").Value;
+                    var imagesFolder = _configuration.GetSection("BaseUrl:imagesFolder").Value;
+
+                    baseFolder = baseFolder + imagesFolder;
+
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), baseFolder);
+                    if (!Directory.Exists(filePath))
+                    {
+                        Directory.CreateDirectory(filePath);
+                    }
+                    string fileName = DateTime.UtcNow.ToString("ddMMyyyyhhmmss") + "_" + room.File.FileName;
+
+                    using (var fileStream = new FileStream(filePath + fileName, FileMode.Create))
+                    {
+                        roomDto.File.CopyTo(fileStream);
+                    }
+                    room.Image = imagesFolder + fileName;
 
                 }
                 else
                 {
-                    room.Image = "https://placehold.co/600x400";
+                    room.Image = "http://placehold.co/600x400";
                 }
                 _db.Rooms.Update(room);
                 _db.SaveChanges();
@@ -134,15 +167,46 @@ namespace HotelBookingAPI.Controllers
                         }
                     }
 
-                    string fileName = room.RoomID + Path.GetExtension(roomDto.File.FileName);
-                    string filePath = @"wwwroot\RoomImages\" + fileName;
+                    /*string fileName = room.RoomID + Path.GetExtension(roomDto.File.FileName);
+                    //string filePath = @"wwwroot\RoomImages\" + fileName;
+                    string filePath = @"\OnlineHotelRoomBooking\Photos\" + fileName;
                     var filePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
                     using (var fileStream = new FileStream(filePathDirectory, FileMode.Create))
                     {
                         roomDto.File.CopyTo(fileStream);
                     }
                     var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
-                    room.Image = "/RoomImages/" + fileName;
+                    //room.Image = "/RoomImages/" + fileName;
+                    room.Image = "/" + fileName;*/
+
+                    /*string fileName = room.RoomID + Path.GetExtension(roomDto.File.FileName);
+                    string filePath = *//*_baseUrl.WebUrl + _baseUrl.ImageUrl +*//* fileName;
+                    var filePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+                    using (var fileStream = new FileStream(filePathDirectory, FileMode.Create))
+                    {
+                        roomDto.File.CopyTo(fileStream);
+                    }
+                    var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
+
+                    room.Image = fileName;*/
+
+                    var baseFolder = _configuration.GetSection("BaseUrl:baseFolder").Value;
+                    var imagesFolder = _configuration.GetSection("BaseUrl:imagesFolder").Value;
+
+                    baseFolder = baseFolder + imagesFolder;
+
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), baseFolder);
+                    if (!Directory.Exists(filePath))
+                    {
+                        Directory.CreateDirectory(filePath);
+                    }
+                    string fileName = DateTime.UtcNow.ToString("ddMMyyyyhhmmss") + "_" + room.File.FileName;
+
+                    using (var fileStream = new FileStream(filePath + fileName, FileMode.Create))
+                    {
+                        roomDto.File.CopyTo(fileStream);
+                    }
+                    room.Image = imagesFolder + fileName;
                 }
                 _db.Rooms.Update(room);
                 _db.SaveChanges();
