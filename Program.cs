@@ -9,6 +9,8 @@ using HotelBookingAPI.Models;
 using HotelBookingAPI.Service.IService;
 using HotelBookingAPI.Service;
 using Microsoft.AspNetCore.Identity;
+using Stripe;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +22,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("myConnectionStrings")));
+
 
 //AutoMapper
 #region Mapper
@@ -73,14 +76,20 @@ builder.AddAppAuthetication();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//if (app.Environment.IsDevelopment())
+//{
+//}
 
 app.UseStaticFiles();
-app.UseHttpsRedirection();
+app.UseCors(options =>
+{
+    options.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+});
+//app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 

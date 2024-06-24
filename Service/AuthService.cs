@@ -3,6 +3,7 @@ using HotelBookingAPI.Models.Dto;
 using HotelBookingAPI.Models;
 using Microsoft.AspNetCore.Identity;
 using HotelBookingAPI.Service.IService;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace HotelBookingAPI.Service
 {
@@ -41,7 +42,7 @@ namespace HotelBookingAPI.Service
 
         public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
         {
-            var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == loginRequestDto.UserName.ToLower());
+            var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == loginRequestDto.Email.ToLower());
 
             bool isValid = await _userManager.CheckPasswordAsync(user, loginRequestDto.Password);
 

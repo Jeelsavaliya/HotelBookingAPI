@@ -1,5 +1,6 @@
 ﻿using HotelBookingAPI.Models;
 using HotelBookingAPI.Service.IService;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -16,6 +17,7 @@ namespace HotelBookingAPI.Service
             _jwtOptions = jwtOptions.Value;
         }
 
+        #region Generate Token
         public string GenerateToken(ApplicationUser applicationUser, IEnumerable<string> roles)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -43,5 +45,8 @@ namespace HotelBookingAPI.Service
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
+        #endregion
+
+       
     }
 }
