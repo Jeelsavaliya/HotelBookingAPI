@@ -11,7 +11,11 @@ namespace HotelBookingAPI
             var mappingConfig = new MapperConfiguration(config =>
             {
                 config.CreateMap<RoomTypeDto, RoomType>().ReverseMap();
-                /*config.CreateMap<RoomType, RoomTypeDto>();*/
+                config.CreateMap<RoomDto, Room>().ReverseMap();
+                config.CreateMap<CheckAvailabilityDto, CheckAvailability>().ReverseMap();
+                config.CreateMap<BookingRoomDto, BookingRoom>().ReverseMap();
+                config.CreateMap<CheckAvailabilityDto, CheckAvailability>().ReverseMap();
+               
             });
             return mappingConfig;
         }

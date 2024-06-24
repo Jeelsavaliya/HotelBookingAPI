@@ -23,7 +23,7 @@ namespace HotelBookingAPI.Extensions
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(x =>
             {
-                x.TokenValidationParameters = new TokenValidationParameters
+                x.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
@@ -32,6 +32,7 @@ namespace HotelBookingAPI.Extensions
                     ValidAudience = audience,
                     ValidateAudience = true
                 };
+                    
             });
 
             return builder;

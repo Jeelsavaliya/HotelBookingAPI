@@ -4,6 +4,7 @@ using HotelBookingAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelBookingAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240501084059_AddCheckAvailavilityTable")]
+    partial class AddCheckAvailavilityTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -91,60 +94,6 @@ namespace HotelBookingAPI.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("HotelBookingAPI.Models.BookingRoom", b =>
-                {
-                    b.Property<int>("BookingRoomID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookingRoomID"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("Address");
-
-                    b.Property<DateTime>("CheckInDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("CheckOutDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("Email");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("FirstName");
-
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("PhoneNumber");
-
-                    b.Property<decimal?>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("RoomID")
-                        .HasColumnType("int");
-
-                    b.HasKey("BookingRoomID");
-
-                    b.HasIndex("RoomID");
-
-                    b.ToTable("BookingRooms");
-                });
-
             modelBuilder.Entity("HotelBookingAPI.Models.CheckAvailability", b =>
                 {
                     b.Property<int>("CheckAvailabilityID")
@@ -159,7 +108,12 @@ namespace HotelBookingAPI.Migrations
                     b.Property<DateTime>("CheckOutTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("RoomID")
+                        .HasColumnType("int");
+
                     b.HasKey("CheckAvailabilityID");
+
+                    b.HasIndex("RoomID");
 
                     b.ToTable("CheckAvailabilitys");
                 });
@@ -184,10 +138,6 @@ namespace HotelBookingAPI.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(500)")
                         .HasColumnName("Photo");
-
-                    b.Property<decimal>("PricePerNight")
-                        .HasColumnType("decimal(10,2)")
-                        .HasColumnName("PricePerNight");
 
                     b.Property<int>("RoomNumber")
                         .HasColumnType("int")
@@ -385,7 +335,7 @@ namespace HotelBookingAPI.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("HotelBookingAPI.Models.BookingRoom", b =>
+            modelBuilder.Entity("HotelBookingAPI.Models.CheckAvailability", b =>
                 {
                     b.HasOne("HotelBookingAPI.Models.Room", "Room")
                         .WithMany()
